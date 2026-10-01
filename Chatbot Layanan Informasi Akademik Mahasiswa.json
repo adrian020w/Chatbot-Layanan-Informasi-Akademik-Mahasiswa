@@ -1,0 +1,115 @@
+{
+  "name": "Chatbot Layanan Informasi Akademik Mahasiswa",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Saya chatbot informasi akademik mahasiswa. Ada yang bisa saya bantu seputar perkuliahan, tugas, LMS, jadwal, atau kegiatan akademik?",
+        "options": {}
+      },
+      "id": "18e13686-9260-487b-9c1a-3d513d186ea9",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        32
+      ],
+      "webhookId": "7c1f4b2e-5d3a-4e8f-9a6b-2f0c1d9e8a77"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Anda adalah chatbot informasi akademik mahasiswa.\n\nTugas Anda adalah membantu mahasiswa menjawab pertanyaan seputar perkuliahan, tugas, LMS, jadwal, dan kegiatan akademik.\n\nJawablah pertanyaan dengan bahasa Indonesia yang jelas, singkat, ramah, dan mudah dipahami mahasiswa.\n\nJika pertanyaan tidak berhubungan dengan informasi akademik, jelaskan bahwa Anda hanya dapat membantu pertanyaan yang berkaitan dengan informasi akademik mahasiswa.\n\nJangan mengarang informasi yang tidak diketahui. Jika informasi tidak tersedia, sampaikan dengan jujur bahwa informasi tersebut tidak diketahui."
+        }
+      },
+      "id": "5580ec4d-2853-4393-9035-d75c94e00a75",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        336,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "id": "5f82de8d-64f7-4e06-86b6-3c959a9601da",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        224,
+        272
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6e3j98gljLXSMZAS",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "3d9565b1-eba4-4b67-9ded-d6c5eae62548",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        272
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "753d7662-3221-44d9-b19b-f49b78985a7a",
+  "meta": {
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "3heAcdaSl7zMfMy9",
+  "tags": []
+}
